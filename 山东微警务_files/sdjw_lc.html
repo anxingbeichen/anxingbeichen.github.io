@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<!-- saved from url=(0188)https://msjw.gat.shandong.gov.cn/zayw/sdjw_lc.html?a=64882cd78474f9a5e4b9203dbc4b1e66384f2ad843b4390b7639c76e67c0e2df&idno=null&case_id=3701145012025042800017&pid=0919&t=0.4092454251504799 -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>山东微警务</title>
+    <link rel="stylesheet" href="./weui.min.css">
+    <script type="text/javascript" src="./jquery-1.11.2.min.js.下载"></script>
+    <script type="text/javascript" src="./weui.min.js.下载"></script>
+<style>
+    body{background: #fefefe;}
+    .slhdw_sd{
+        border-bottom: 1px solid #eee;
+        padding-bottom: 7px;
+    }
+    .slhdw_sd_tit{padding: 6px 0;color:#717171;font-size: 14px;color:#666}
+    .slhdw_sd_tit1{
+        font-size: 15px;
+        color:#aaa;
+    }
+    .sdxx_wjw{
+        width: 96%;
+        margin: 0 auto;
+
+    }
+    .slhdw_sd_int{
+        font-size: 16px;
+        color:#666;
+        width: 60%;
+    }
+    .slhdw_sd_tit1{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .slhdw_sd_tit1 a{
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        color:#6CDA47
+    }
+    .slhdw_sd_tit1 a span{
+        font-size: 16px;
+    }
+    .sdjw_btms{
+        background: #50A0F8;
+        color:#fff;
+        padding: 10px 0;
+        text-align: center;
+        margin-top: 36px;
+        border-radius: 4px;
+    }
+    .sp_ridus{
+        display: inline-block;
+        width: 15px;
+        height: 15px;
+        background: #DDDDDD;
+        border-radius: 17px;
+        position: absolute;
+        left: -8.34px;
+    }
+    .active_sd{
+        background:#50A0F8;
+    }
+    .sd_step{
+        position: relative;border-left: 1.5px solid #DDDDDD;min-height: 60px;
+    }
+    .active_step{
+        border-left:#50A0F8 1.5px solid;
+    }
+    .blzzdw_sdwjw{
+        margin-left: 10%;
+        display: inline-block;
+        margin-top: -6px;
+        color:#aaa;
+    }
+    .act_sdjw{color:#000}
+    input{
+        border:0;
+        outline: none;
+    }
+    .slhdw_sd_int::-webkit-input-placeholder{
+        color: #aaa;
+    }
+    .slhdw_sd_int::-moz-placeholder{
+        color: #aaa;
+    }
+    .slhdw_sd_int:-ms-input-placeholder{
+        color: #aaa;
+    }
+</style><script>
+    var jsondata ;
+    $(function(){
+
+        var v_idno =GetQueryString('idno');
+        var v_a =GetQueryString('a');
+        var v_case_id =GetQueryString('case_id');
+        var v_pid =GetQueryString('pid');
+
+        if ((v_case_id === "" || v_case_id == null || v_pid === "" || v_pid == null) && ((v_idno ==="" || v_idno == null) && (v_a === "" || v_a == null)) ){
+            parent.loading.hide();
+            return;
+        }
+        $.ajax({
+            url:"data.jsp",
+            type:'post',
+            data:{"idno":v_idno,"a":v_a,"slh":v_case_id,"pid":v_pid},
+            dataType:'json',
+            beforeSend:function () {
+                    //loading = parent.weui.loading('查询中');
+            },
+            success:function (data) {
+                parent.loading.hide();
+                if (data.code == "1"){
+                    parent.weui.alert(data.msg);
+                }else {
+                    jsondata = data.datas;
+                    showRs(data.datas);
+                    parent.setIframeHeight();
+                }
+            },
+            error:function (a,b,c) {
+                parent.loading.hide();
+                parent.weui.topTips('查询失败:请刷新重试!', 3000);
+            }
+        });
+    });
+    function yz() {
+        if ($('#pid').val().length !== 4) {
+            weui.topTips('身份证号输入错误', 3000);
+            return false;
+        }
+        if ($('#case_id').val().length !== 22) {
+            weui.topTips('受理号输入错误', 3000);
+            return false;
+        }
+        return true;
+    }
+    function showRs(data) {
+        if (data.type == "10") {
+            $('#ems').show();
+            if(data.status === "70"){
+                emsshowlz(data);
+            }else if (data.status === "51" || data.status === "50"){
+                emsshowhk(data);
+            }else if (data.status === "40"){
+                if (data.kddh == ""){
+                    emsshowwc(data);
+                }else {
+                    emsshowsj(data);
+                }
+            }else if (data.status === "22"){
+                emsshowzz(data);
+            }else if (data.status === "20"){
+                emsshowqf(data);
+            }else if (data.status === "11"){
+                emsshowsl(data);
+            }else if (data.status === "92"){
+                emsshowhk(data);
+            }else if (data.status === "91"){
+                emsshowsh(data);
+            }else if (data.status === "90"){
+                emsshowcx(data);
+            }
+        }else {
+            $('#sdjw').show();
+            if(data.status === "70"){
+                showlz(data);
+            }else if (data.status === "51" || data.status === "50"){
+                showdd(data);
+            }else if (data.status === "40"){
+                showwc(data);
+            }else if (data.status === "22"){
+                showzz(data);
+            }else if (data.status === "20"){
+                showqf(data);
+            }else if (data.status === "11"){
+                showqf(data);
+            }else if (data.status === "92"){
+                showhk(data);
+            }else if (data.status === "91"){
+                showsh(data);
+            }else if (data.status === "90"){
+                showcx(data);
+            }
+        }
+    }
+
+    function showlz(data) {
+        $("#lzsj").addClass("active_step");
+        $("#lzsjSpan").addClass("active_sd");
+        $("#lzsjjw").addClass("act_sdjw");
+        $("#lzsjTime").text(data.lzsj);
+        showdd(data);
+    }
+    function showdd(data) {
+        $("#ddsj").addClass("active_step");
+        $("#ddsjSpan").addClass("active_sd");
+        $("#ddsjjw").addClass("act_sdjw");
+        $("#ddsjTime").text(data.ddsj);
+        showwc(data);
+    }
+    function showwc(data) {
+        $("#wcsj").addClass("active_step");
+        $("#wcsjSpan").addClass("active_sd");
+        $("#wcsjjw").addClass("act_sdjw");
+        $("#wcsjTime").text(data.wcsj);
+
+        $("#zzsj").hide();
+        showqf(data);
+    }
+
+    function showzz(data) {
+        $("#zzsj").addClass("active_step");
+        $("#zzsjSpan").addClass("active_sd");
+        $("#zzsjjw").addClass("act_sdjw");
+        $("#zzsjTime").text(data.zzsj);
+
+        $("#wcsj").hide();
+        showqf(data);
+    }
+    function showhk(data) {
+        $("#qfsj").addClass("active_step");
+        $("#qfsjSpan").addClass("active_sd");
+        $("#qfsjjw").addClass("act_sdjw");
+        $("#qfsjtext").text("审核不通过!");
+        $("#qfsjTime").text(data.hksj);
+        $("#qfsj").removeClass("active_step");
+        showsl(data);
+    }
+
+    function showcx(data) {
+        $("#qfsj").addClass("active_step");
+        $("#qfsjSpan").addClass("active_sd");
+        $("#qfsjjw").addClass("act_sdjw");
+        $("#qfsjtext").text("已撤销!");
+        $("#qfsjTime").text(data.hksj);
+        $("#qfsj").removeClass("active_step");
+        showsl(data);
+    }
+    function showsh(data) {
+        $("#qfsj").addClass("active_step");
+        $("#qfsjSpan").addClass("active_sd");
+        $("#qfsjjw").addClass("act_sdjw");
+        $("#qfsjtext").text("审核不通过!");
+        $("#qfsjTime").text(data.hksj);
+        $("#qfsj").removeClass("active_step");
+        showsl(data);
+    }
+
+    function showqf(data) {
+        $("#qfsj").addClass("active_step");
+        $("#qfsjSpan").addClass("active_sd");
+        $("#qfsjjw").addClass("act_sdjw");
+        $("#qfsjTime").text(data.qfsj);
+        showsl(data);
+    }
+    function showsl(data) {
+        $("#slsj").addClass("active_step");
+        $("#slsjSpan").addClass("active_sd");
+        $("#slsjjw").addClass("act_sdjw");
+        $("#slsjTime").text(data.slsj);
+    }
+
+    //ems
+    function emsshowlz(data) {
+        $("#emsLzsj").addClass("active_step");
+        $("#emsLzsjSpan").addClass("active_sd");
+        $("#emsLzsjJw").addClass("act_sdjw");
+        $("#emsLzsjTime").text(data.lzsj);
+        emsshowsj(data);
+    }
+    function emsshowhk(data) {
+        $("#emsQfsj").addClass("active_step");
+        $("#emsQfsjSpan").addClass("active_sd");
+        $("#emsQfsjJw").addClass("act_sdjw");
+        $("#emsQfsjtext").text("审核不通过!");
+        $("#emsQfsjTime").text(data.hksj);
+        $("#emsQfsj").removeClass("active_step");
+        emsshowsl(data);
+    }
+
+    function emsshowsh(data) {
+        $("#emsQfsj").addClass("active_step");
+        $("#emsQfsjSpan").addClass("active_sd");
+        $("#emsQfsjJw").addClass("act_sdjw");
+        $("#emsQfsjtext").text("审核未通过!");
+        $("#emsQfsjTime").text(data.hksj);
+        $("#emsQfsj").removeClass("active_step");
+        emsshowsl(data);
+    }
+
+    function emsshowcx(data) {
+        $("#emsQfsj").addClass("active_step");
+        $("#emsQfsjSpan").addClass("active_sd");
+        $("#emsQfsjJw").addClass("act_sdjw");
+        $("#emsQfsjtext").text("已撤销!");
+        $("#emsQfsjTime").text(data.hksj);
+        $("#emsQfsj").removeClass("active_step");
+        emsshowsl(data);
+    }
+    function emsshowsj(data) {
+        $("#emsSjsj").addClass("active_step");
+        $("#emsSjsjSpan").addClass("active_sd");
+        $("#emsSjsjJw").addClass("act_sdjw");
+        $("#emsSjsjTime").text(data.sjsj);
+        $('#ckwl').show();
+        emsshowwc(data);
+    }
+    function emsshowwc(data) {
+        $("#emswcsj").addClass("active_step");
+        $("#emswcsjSpan").addClass("active_sd");
+        $("#emswcsjjw").addClass("act_sdjw");
+        $("#emswcsjTime").text(data.wcsj);
+
+        $("#emsZzsj").hide();
+        emsshowqf(data);
+    }
+    function emsshowzz(data) {
+        $("#emsZzsj").addClass("active_step");
+        $("#emsZzsjSpan").addClass("active_sd");
+        $("#emsZzsjJw").addClass("act_sdjw");
+        $("#emsZzsjTime").text(data.zzsj);
+
+        $("#emswcsj").hide();
+        emsshowqf(data);
+    }
+    function emsshowqf(data) {
+        $("#emsQfsj").addClass("active_step");
+        $("#emsQfsjSpan").addClass("active_sd");
+        $("#emsQfsjJw").addClass("act_sdjw");
+        $("#emsQfsjTime").text(data.qfsj);
+        emsshowsl(data);
+    }
+    function emsshowsl(data) {
+        $("#emsSlsj").addClass("active_step");
+        $("#emsSlsjSpan").addClass("active_sd");
+        $("#emsSlsjJw").addClass("act_sdjw");
+        $("#emsSlsjTime").text(data.slsj);
+    }
+
+    function GetQueryString(name) {
+        var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if(r!=null)return  unescape(r[2]); return null;
+    }
+
+    function expressInfo() {
+        var v_kddh = jsondata.kddh;
+        var v_pid = jsondata.pid;
+        window.location.href='expressInfo.jsp?kddh=' + v_kddh + "&pid=" + v_pid + "&t=" + Math.random();
+    }
+
+</script></head>
+
+
+<body>
+<div id="sdjw" style="">
+    <div style="width:20%;margin: 0px auto 30px;">
+        <img src="./tu2.png" style="width: 100%;">
+    </div>
+
+    <div style="width: 98%;margin: 0 auto 30px;border: 1px dashed #50A0F8;border-radius: 5px;position: relative;z-index: 999;margin-top: -25px;background: #fefefe;">
+        <div style="text-align: center;color:#50A0F8;padding: 10px 0;font-size: 17px;">查询结果</div>
+        <div style="width: 84%;margin: 0 auto;min-height: 50%;">
+            <div class="sd_step active_step" id="slsj">
+                <span class="sp_ridus active_sd" id="slsjSpan"></span>
+                <span class="blzzdw_sdwjw act_sdjw" id="slsjjw">
+							 <div>窗口受理</div>
+							 <div style="color:#aaa;font-size: 14px;" id="slsjTime">2025-04-28 13:36:23</div>
+					</span>
+            </div>
+            <div class="sd_step active_step" id="qfsj">
+                <span class="sp_ridus active_sd" id="qfsjSpan"></span>
+                <span class="blzzdw_sdwjw act_sdjw" id="qfsjjw">
+							 <div id="qfsjtext">审核签发</div>
+							 <div style="color:#aaa;font-size: 14px;" id="qfsjTime">2025-04-28 14:48:32</div>
+					</span>
+
+            </div>
+            <div class="sd_step" id="zzsj" style="display: none;">
+                <span class="sp_ridus" id="zzsjSpan"></span>
+                <span class="blzzdw_sdwjw" id="zzsjjw">
+							 <div>制证中</div>
+							 <div style="color:#aaa;font-size: 14px;" id="zzsjTime"></div>
+						 </span>
+            </div>
+            
+            
+            <div class="sd_step active_step" style="border:0" id="lzsj">
+                <span class="sp_ridus active_sd" style="left: -7px;" id="lzsjSpan"></span>
+                <span class="blzzdw_sdwjw act_sdjw" id="lzsjjw">
+							 <div>制作中</div>
+							 <div style="color:#aaa;font-size: 14px;" id="lzsjTime">2025-05-12 15:35:36</div>
+						 </span>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="ems" style="display: none">
+    <div style="width:20%;margin: 0px auto 30px;">
+        <img src="./tu1.png" style="width: 100%;">
+    </div>
+
+    <div style="width: 98%;margin: 0 auto 20px;border: 1px dashed #50A0F8;border-radius: 5px;position: relative;z-index: 999;margin-top: -25px;background: #fefefe;">
+        <div style="text-align: center;color:#50A0F8;padding: 10px 0;font-size: 17px;">查询结果</div>
+        <div style="width: 84%;margin: 0 auto;min-height: 50%;">
+            <div class="sd_step active_step" id="emsSlsj">
+                <span class="sp_ridus active_sd" id="emsSlsjSpan"></span>
+                <span class="blzzdw_sdwjw act_sdjw" id="emsSlsjJw">
+	        		 	 <div>窗口受理</div>
+	        		 	 <div style="color:#aaa;font-size: 14px;" id="emsSlsjTime"></div>
+	        		 </span>
+
+            </div>
+            <div class="sd_step" id="emsQfsj">
+                <span class="sp_ridus" id="emsQfsjSpan"></span>
+                <span class="blzzdw_sdwjw" id="emsQfsjJw">
+	        		 	 <div id="emsQfsjtext">审核签发</div>
+	        		 	 <div style="color:#aaa;font-size: 14px;" id="emsQfsjTime"></div>
+	        		 </span>
+
+            </div>
+            <div class="sd_step" id="emsZzsj">
+
+                <span class="sp_ridus" id="emsZzsjSpan"></span>
+                <span class="blzzdw_sdwjw" id="emsZzsjJw">
+	        		 	 <div>制证中</div>
+	        		 	 <div style="color:#aaa;font-size: 14px;" id="emsZzsjTime"></div>
+	        		 </span>
+            </div>
+
+            <div class="sd_step" id="emswcsj">
+                <span class="sp_ridus" id="emswcsjSpan"></span>
+                <span class="blzzdw_sdwjw" id="emswcsjjw">
+							 <div>已制证</div>
+							 <div style="color:#aaa;font-size: 14px;" id="emswcsjTime"></div>
+					</span>
+            </div>
+
+            <div class="sd_step" id="emsSjsj">
+
+                <span class="sp_ridus" id="emsSjsjSpan"></span>
+                <span class="blzzdw_sdwjw" id="emsSjsjJw">
+						<div>EMS已收件 &nbsp;&nbsp;<a src="#" id="ckwl" style="display: none;color: #01AAED" onclick="expressInfo()">查看物流</a></div>
+	        		 	 <div style="color:#aaa;font-size: 14px;" id="emsSjsjTime"></div>
+	        		 </span>
+            </div>
+            <div class="sd_step" style="border:0" id="emsLzsj">
+
+                <span class="sp_ridus" style="left: -7px;" id="emsLzsjSpan"></span>
+                <span class="blzzdw_sdwjw" id="emsLzsjJw">
+	        		 	 <div>已领证</div>
+	        		 	 <div style="color:#aaa;font-size: 14px;" id="emsLzsjTime"></div>
+	        		 </span>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+</body></html>
