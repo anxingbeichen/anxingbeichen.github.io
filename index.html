@@ -1,238 +1,135 @@
 <!DOCTYPE html>
-<!-- saved from url=(0113)https://msjw.gat.shandong.gov.cn/zayw/sdjw.jsp?a=64882cd78474f9a5e4b9203dbc4b1e66384f2ad843b4390b7639c76e67c0e2df -->
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	
-	<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-	<title>山东微警务</title>
-	<link rel="stylesheet" href="./山东微警务_files/weui.min.css">
-	<script type="text/javascript" src="./山东微警务_files/jquery-1.11.2.min.js.下载"></script>
-	<script type="text/javascript" src="./山东微警务_files/weui.min.js.下载"></script>
-<style>
-	body{background: #fefefe;}
-	.slhdw_sd{
-		border-bottom: 1px solid #eee;
-		padding-bottom: 7px;
-	}
-	.slhdw_sd_tit{padding: 6px 0;color:#717171;font-size: 14px;color:#666}
-	.slhdw_sd_tit1{
-		font-size: 15px;
-		color:#aaa;
-	}
-	.sdxx_wjw{
-		width: 96%;
-		margin: 0 auto;
-
-	}
-	.slhdw_sd_int{
-		font-size: 16px;
-		color:#666;
-		width: 60%;
-	}
-	.slhdw_sd_tit1{
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-	}
-	.slhdw_sd_tit1 a{
-		display: flex;
-		align-items: center;
-		justify-content: flex-end;
-		color:#6CDA47
-	}
-	.slhdw_sd_tit1 a span{
-		font-size: 16px;
-	}
-	.sdjw_btms{
-		background: #50A0F8;
-		color:#fff;
-		padding: 10px 0;
-		text-align: center;
-		margin-top: 36px;
-		border-radius: 4px;
-	}
-	.sp_ridus{
-		display: inline-block;
-		width: 15px;
-		height: 15px;
-		background: #DDDDDD;
-		border-radius: 17px;
-		position: absolute;
-		left: -8.34px;
-	}
-	.active_sd{
-		background:#50A0F8;
-	}
-	.sd_step{
-		position: relative;border-left: 1.5px solid #DDDDDD;min-height: 60px;
-	}
-	.active_step{
-		border-left:#50A0F8 1.5px solid;
-	}
-	.blzzdw_sdwjw{
-		margin-left: 10%;
-		display: inline-block;
-		margin-top: -6px;
-		color:#aaa;
-	}
-	.act_sdjw{color:#000}
-	input{
-		border:0;
-		outline: none;
-	}
-	.slhdw_sd_int::-webkit-input-placeholder{
-		color: #aaa;
-	}
-	.slhdw_sd_int::-moz-placeholder{
-		color: #aaa;
-	}
-	.slhdw_sd_int:-ms-input-placeholder{
-		color: #aaa;
-	}
-</style><script>
-	var loading;
-	var subpid = "0919";
-	var subcase_id = "3701145012025042800017";
-	var idno = "null";
-	var lv_a = "64882cd78474f9a5e4b9203dbc4b1e66384f2ad843b4390b7639c76e67c0e2df";
-
-
-
-
-	$(function(){
-		var case_id = $('#case_id');
-		var pid = $('#pid');
-
-		var v_case_id =GetQueryString('case_id');
-		var v_pid =GetQueryString('pid');
-
-		if (subpid != ""){
-			pid.val(subpid);
-		}
-		if (subcase_id != ""){
-			case_id.val(subcase_id);
-		}
-
-
-		if (v_case_id != null && v_case_id != "") {
-			case_id.val(v_case_id);
-		}
-		if (v_pid !=null && v_pid != "") {
-			pid.val(v_pid);
-		}
-
-
-		case_id.on('input',function () {
-			if (case_id.val() && pid.val()){
-				$('#showTooltips').removeClass('weui-btn_disabled');
-			}else {
-				$('#showTooltips').addClass('weui-btn_disabled');
-			}
-		});
-
-		pid.on('input',function () {
-			if (case_id.val() && pid.val()){
-				$('#showTooltips').removeClass('weui-btn_disabled');
-			}else {
-				$('#showTooltips').addClass('weui-btn_disabled');
-			}
-		});
-
-		case_id.on('blur',function () {
-			if (case_id.val().length != 22){
-				case_id.css('color','red');
-			}else {
-				case_id.css('color','');
-			}
-		});
-		pid.on('blur',function () {
-			if (pid.val().length != 4){
-				pid.css('color','red');
-			}else {
-				pid.css('color','');
-			}
-		});
-
-		$('#showTooltips').on('click', function(){
-			if ($(this).hasClass('weui-btn_disabled')) return;
-			// toptips的fixed, 如果有`animation`, `position: fixed`不生效
-			if (yz()){
-				loading = weui.loading('查询中');
-			}else {
-				return;
-			}
-			$('#iframe').attr('src',"sdjw_lc.html?" + "a=" + lv_a + "&idno=" +idno + "&case_id="+case_id.val() + "&pid="+ pid.val() +  "&t=" + Math.random());
-		});
-
-		if (case_id.val() != '' && pid.val() != '') {
-			$('#showTooltips').removeClass('weui-btn_disabled');
-			$('#showTooltips').click();
-		}
-	});
-
-	function GetQueryString(name) {
-		var  reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
-		var r = window.location.search.substr(1).match(reg);
-		if(r!=null)return  unescape(r[2]); return null;
-	}
-
-	function yz() {
-		if ($('#pid').val().length !== 4) {
-			weui.topTips('身份证号输入错误', 3000);
-			return false;
-		}
-		if ($('#case_id').val().length !== 22) {
-			weui.topTips('受理号输入错误', 3000);
-			return false;
-		}
-		return true;
-	}
-
-	function setIframeHeight() {
-		var iframe = document.getElementById('iframe');
-		//alert(iframe);
-		if (iframe) {
-			var iframeWin = iframe.contentWindow || iframe.contentDocument.parentWindow;
-			if (iframeWin.document.body) {
-				iframe.height = iframeWin.document.documentElement.scrollHeight || iframeWin.document.body.scrollHeight;
-			}
-		}
-	}
-</script></head>
-
-
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>身份证制证进度查询</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #1a5276;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        
+        .id-number {
+            text-align: center;
+            font-size: 18px;
+            margin: 20px 0;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+        }
+        
+        hr {
+            border: none;
+            border-top: 1px solid #eee;
+            margin: 20px 0;
+        }
+        
+        h2 {
+            color: #1a5276;
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+        
+        .progress-list {
+            list-style-type: none;
+        }
+        
+        .progress-item {
+            margin-bottom: 15px;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .progress-item:before {
+            content: "•";
+            color: #3498db;
+            font-size: 24px;
+            position: absolute;
+            left: 0;
+            top: -3px;
+        }
+        
+        .progress-stage {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .progress-time {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 20px;
+            }
+            
+            h2 {
+                font-size: 18px;
+            }
+            
+            .id-number {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
 <body>
-<div class="weui-toptips weui-toptips_warn js_tooltips" style="opacity: 0; display: none;">错误提示</div>
-<div class="sdxx_wjw">
-	<div class="weui-form">
-		<div class="weui-form__text-area">
-			<h2 class="weui-form__title">身份证制证进度查询</h2>
-		</div>
-		<div class="weui-form__control-area">
-			<div class="weui-cells__group weui-cells__group_form">
-				<div class="weui-cells weui-cells_form" style="font-size: 15px">
-					
-					<div class="weui-cell">
-						<div class="weui-cell__hd" style="padding-right: 1px"><label class="weui-label" style="max-width: 6em">公民身份号码</label></div>
-						<div class="weui-cell__bd" style="padding-left: 1px">
-							<input id="pid" class="weui-input" placeholder="请输入公民身份号码后四位" maxlength="4">
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<div class="weui-form__opr-area" style="margin-bottom :40px">
-			
-		</div>
-	</div>
-	<div>
-		<iframe id="iframe" src="./山东微警务_files/sdjw_lc.html" frameborder="0" scrolling="no" style="width: 100%;margin: 0 auto 30px;min-height:500px" height="618" seamless="seamless">
-
-		</iframe>
-	</div>
-
-</div>
-
-
-
-</body></html>
+    <div class="container">
+        <h1>身份证制证进度查询</h1>
+        
+        <div class="id-number">
+            公民身份号码 0919
+        </div>
+        
+        <hr>
+        
+        <h2>查询结果</h2>
+        
+        <ul class="progress-list">
+            <li class="progress-item">
+                <div class="progress-stage">窗口受理</div>
+                <div class="progress-time">2025-04-28 13:36:23</div>
+            </li>
+            <li class="progress-item">
+                <div class="progress-stage">审核签发</div>
+                <div class="progress-time">2025-04-28 14:48:32</div>
+            </li>
+            <li class="progress-item">
+                <div class="progress-stage">制作中</div>
+                <div class="progress-time">2025-05-12 15:35:36</div>
+            </li>
+        </ul>
+    </div>
+</body>
+</html>
